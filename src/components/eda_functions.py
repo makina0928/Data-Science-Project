@@ -58,7 +58,7 @@ def calculate_key_metrics(df, numeric_columns=None, handle_missing='drop'):
 
 
 # Calculate Active vs. Churned distribution
-def calculate_status_distribution(df, column_name):
+def calculate_status_distribution(df, column_name=None):
     """
     Calculate the count and percentage distribution of values in a binary categorical column.
     
@@ -73,19 +73,23 @@ def calculate_status_distribution(df, column_name):
     if column_name not in df.columns:
         raise ValueError(f"Column '{column_name}' not found in the DataFrame.")
     
+    # Ensure the DataFrame is not empty
+    if df.empty:
+        raise ValueError("The DataFrame is empty.")
+    
     # Total customers
     total_customers = len(df)
 
     # Count values and calculate percentages
-    value_counts = df[column_name].value_counts().to_dict()
-    percentages = {key: round((value / total_customers) * 100, 2) for key, value in value_counts.items()}
+    value_counts = df[column_name].value_counts()
+    percentages = (value_counts / total_customers * 100).round(2)
     
-    # Prepare the results as a dictionary
-    results = {
-        "Categories": list(value_counts.keys()),
-        "Counts": list(value_counts.values()),
-        "Percentages": list(percentages.values())
-    }
+    # Create a results DataFrame
+    results = pd.DataFrame({
+        column_name: value_counts.index,
+        "Counts": value_counts.values,
+        "Percentages": percentages.values
+    })
     
     return results
 

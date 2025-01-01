@@ -2,6 +2,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+import plotly.graph_objects as go
 # Define numerical & categorical columns
 def print_feature_types(df):
     numeric_features = df.select_dtypes(include=[np.number]).columns.tolist()

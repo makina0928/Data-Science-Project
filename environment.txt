@@ -1,2 +1,2 @@
 1) python -m venv ./venv
-2) .\venvscripts\activate
+2) .\venv\scripts\activate

@@ -75,17 +75,16 @@ class DataIngestion:
             raise CustomException(e, sys)
 
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 if __name__ == "__main__":
-    try:
-        # Create an instance of the DataIngestion class
-        data_ingestion = DataIngestion()
+    # Create an instance of the DataIngestion class
+    obj = DataIngestion()
 
-        # Call the initiate_data_ingestion method
-        train_data_path, test_data_path = data_ingestion.initiate_data_ingestion()
+    # Initiate the data ingestion process and get train and test data paths
+    train_data, test_data = obj.initiate_data_ingestion()
 
-        # Print the paths of the train and test datasets
-        print(f"Data Ingestion Completed:\nTrain Data Path: {train_data_path}\nTest Data Path: {test_data_path}")
-    except CustomException as ce:
-        logging.error(f"CustomException occurred: {ce}")
-    except Exception as e:
-        logging.error(f"An unexpected error occurred: {e}")
+    # Initiate the data transformation process
+    data_transformation = DataTransformation()
+    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data)

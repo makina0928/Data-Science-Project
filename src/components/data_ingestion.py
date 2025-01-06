@@ -73,18 +73,3 @@ class DataIngestion:
             )
         except Exception as e:
             raise CustomException(e, sys)
-
-
-from src.components.data_transformation import DataTransformation
-from src.components.data_transformation import DataTransformationConfig
-
-if __name__ == "__main__":
-    # Create an instance of the DataIngestion class
-    obj = DataIngestion()
-
-    # Initiate the data ingestion process and get train and test data paths
-    train_data, test_data = obj.initiate_data_ingestion()
-
-    # Initiate the data transformation process
-    data_transformation = DataTransformation()
-    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data)

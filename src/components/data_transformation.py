@@ -109,6 +109,13 @@ class DataTransformation:
             if target_column_name not in train_df.columns or target_column_name not in test_df.columns:
                 raise CustomException(f"Target column '{target_column_name}' not found in datasets.", sys)
 
+            # Map 'Churn' column values to numeric
+            logging.info("Mapping 'Churn' values to numeric.")
+            for df in [train_df, test_df]:
+                df[target_column_name] = df[target_column_name].map({'No': 0, 'Yes': 1})
+                if df[target_column_name].isnull().any():
+                    raise CustomException("Mapping failed; some 'Churn' values are invalid.", sys)
+
             # Split features and target
             input_feature_train_df = train_df.drop(columns=[target_column_name])
             target_feature_train_df = train_df[target_column_name]
@@ -119,6 +126,7 @@ class DataTransformation:
             input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
 
+            # Concatenate transformed features and target arrays
             train_arr = np.c_[input_feature_train_arr, target_feature_train_df.values]
             test_arr = np.c_[input_feature_test_arr, target_feature_test_df.values]
 
